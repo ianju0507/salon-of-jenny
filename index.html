@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon of Jenny | 專屬美髮美學</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Noto Serif TC', serif; scroll-behavior: smooth; }
+        .hero-bg {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                              url('https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=80');
+        }
+        /* 彈窗背景動畫 */
+        #bookingModal {
+            display: none; 
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #bookingModal.active { display: flex; opacity: 1; }
+        .bg-kakao { background-color: #FEE500; }
+        .text-kakao-brown { color: #3A1D1D; }
+    </style>
+</head>
+<body class="bg-[#F9F7F2] text-[#333]">
+
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <h1 class="text-xl font-semibold tracking-[0.2em] cursor-pointer" onclick="window.scrollTo(0,0)">SALON OF JENNY</h1>
+            
+            <div class="hidden md:flex items-center space-x-6 text-sm tracking-widest">
+                <a href="#about" class="hover:text-stone-400 transition">關於</a>
+                <a href="#services" class="hover:text-stone-400 transition">服務</a>
+                
+                <div class="flex items-center space-x-4 border-l border-stone-300 pl-6">
+                    <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="text-xl hover:text-pink-600 transition">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://open.kakao.com/o/YOUR_LINK" target="_blank" class="text-xl hover:text-yellow-600 transition">
+                        <i class="fa-solid fa-comment"></i>
+                    </a>
+                </div>
+
+                <button onclick="openModal()" class="bg-stone-800 text-white px-6 py-2 rounded-full hover:bg-stone-600 transition shadow-lg">立即預約</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative h-screen flex items-center justify-center text-center hero-bg bg-cover bg-center">
+        <div class="text-white px-4">
+            <p class="text-sm tracking-[0.5em] mb-4">HAIR STUDIO / TAIPEI</p>
+            <h2 class="text-5xl md:text-7xl font-light mb-8">在這裡，遇見更好的自己</h2>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button onclick="openModal()" class="inline-block border border-white px-10 py-4 text-sm tracking-widest hover:bg-white hover:text-black transition duration-500">
+                    ONLINE BOOKING
+                </button>
+                <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="inline-block bg-white/10 backdrop-blur-sm border border-white/30 px-10 py-4 text-sm tracking-widest hover:bg-white/20 transition duration-500">
+                    PORTFOLIO
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 px-6 max-w-4xl mx-auto text-center">
+        <h3 class="text-2xl mb-8 tracking-widest uppercase text-stone-700">The Art of Hair</h3>
+        <p class="text-stone-500 leading-relaxed mb-6">結合韓系精緻感與個人化美學。Jenny 相信髮型不只是造型，更是生活態度的展現。</p>
+        <div class="w-12 h-[1px] bg-stone-300 mx-auto"></div>
+    </section>
+
+    <section class="py-20 bg-stone-100 border-y border-stone-200">
+        <div class="max-w-4xl mx-auto text-center px-6">
+            <h3 class="text-xl mb-10 tracking-widest">Connect with Jenny</h3>
+            <div class="grid md:grid-cols-2 gap-6 max-w-xl mx-auto">
+                <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="flex items-center justify-center space-x-3 bg-white py-4 rounded-lg shadow-sm hover:shadow-md transition">
+                    <i class="fa-brands fa-instagram text-2xl text-pink-600"></i>
+                    <span class="font-medium tracking-widest">Instagram</span>
+                </a>
+                <a href="https://open.kakao.com/o/YOUR_LINK" target="_blank" class="flex items-center justify-center space-x-3 bg-kakao py-4 rounded-lg shadow-sm hover:shadow-md transition">
+                    <i class="fa-solid fa-comment text-2xl text-kakao-brown"></i>
+                    <span class="font-medium tracking-widest text-kakao-brown font-bold">KakaoTalk</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div id="bookingModal">
+        <div class="bg-white w-full max-w-md mx-4 p-8 rounded-2xl shadow-2xl relative transform transition-all">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-black text-2xl">&times;</button>
+            
+            <h3 class="text-2xl mb-6 text-center tracking-widest font-semibold text-stone-800">線上預約諮詢</h3>
+            <p class="text-center text-xs text-stone-400 mb-6 italic">填寫預約資料，Jenny 將盡快回覆您</p>
+            
+            <form id="bookingForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-stone-500 mb-1">姓名 Name</label>
+                    <input type="text" id="name" required class="w-full border-stone-200 border p-3 rounded-lg focus:ring-1 focus:ring-stone-400 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-stone-500 mb-1">電話 Phone</label>
+                    <input type="tel" id="phone" required class="w-full border-stone-200 border p-3 rounded-lg focus:ring-1 focus:ring-stone-400 outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-stone-500 mb-1">日期 Date</label>
+                        <input type="date" id="date" required class="w-full border-stone-200 border p-3 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-stone-500 mb-1">項目 Service</label>
+                        <select id="service" class="w-full border-stone-200 border p-3 rounded-lg text-sm bg-white">
+                            <option>剪髮 Cut</option>
+                            <option>染燙 Color/Perm</option>
+                            <option>護理 Treatment</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-stone-800 text-white py-4 rounded-lg hover:bg-black transition-all duration-300 mt-4 tracking-[0.2em] text-sm">
+                    確認送出預約
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="py-10 text-center text-[10px] text-stone-400 tracking-[0.3em] uppercase">
+        &copy; 2026 SALON OF JENNY.
+    </footer>
+
+    <script>
+        const modal = document.getElementById('bookingModal');
+
+        function openModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滾動
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // 點擊背景關閉
+        window.onclick = function(event) {
+            if (event.target == modal) closeModal();
+        }
+
+        // 表單提交
+        document.getElementById('bookingForm').onsubmit = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            // 模擬成功訊息
+            alert(`預約已送出！謝謝您，${name}。Jenny 將會透過電話或通訊軟體與您聯繫。`);
+            closeModal();
+        }
+    </script>
+</body>
+</html>
