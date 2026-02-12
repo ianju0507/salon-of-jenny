@@ -10,32 +10,53 @@
     
     <style>
         body { font-family: 'Noto Serif TC', 'Noto Sans KR', serif; scroll-behavior: smooth; }
+        
+        /* 配合3D圖的奶油風色調 */
+        .bg-creamy { background-color: #F2EEE8; }
+        .text-wood { color: #8C6A5E; }
+        .bg-wood { background-color: #8C6A5E; }
+        .border-gold { border-color: #C2A383; }
+
         .hero-bg {
-    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                      url('front.jpeg'); /* 改成你的圖片檔名 */
-    background-size: cover;
-    background-position: center;
-}
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                              url('front.jpeg'); 
+            background-size: cover;
+            background-position: center;
+        }
+
         #bookingModal {
-            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center;
+            display: none; position: fixed; inset: 0; background: rgba(58, 45, 40, 0.6);
+            backdrop-filter: blur(8px); z-index: 100; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 0.3s ease;
         }
         #bookingModal.active { display: flex; opacity: 1; }
-        .bg-line { background-color: #06C755; }
-        .bg-kakao { background-color: #FEE500; }
-        .bg-naver { background-color: #03C75A; }
-        .text-kakao-brown { color: #3A1D1D; }
+
+        .btn-luxury {
+            background-color: #8C6A5E;
+            color: white;
+            transition: all 0.4s ease;
+        }
+        .btn-luxury:hover {
+            background-color: #C2A383;
+            transform: translateY(-2px);
+        }
+
+        .glow-effect:hover {
+            box-shadow: 0 0 20px rgba(194, 163, 131, 0.2);
+        }
+
+        /* 導覽點動畫 */
+        .nav-dot { transition: all 0.3s ease; }
     </style>
 </head>
-<body class="bg-[#F9F7F2] text-[#333]">
+<body class="bg-creamy text-[#4A443F]">
 
-    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-stone-200">
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-[#E5DED5]">
         <div class="max-w-7xl mx-auto px-4 md:px-6 h-20 flex justify-between items-center">
-            <h1 class="text-lg md:text-xl font-semibold tracking-[0.2em] cursor-pointer" onclick="window.scrollTo(0,0)">SALON OF JENNY</h1>
+            <h1 class="text-lg md:text-xl font-semibold tracking-[0.2em] text-[#5C534D] cursor-pointer" onclick="window.scrollTo(0,0)">SALON OF JENNY</h1>
             
             <div class="flex items-center space-x-2 md:space-x-6">
-                <select id="langSelect" onchange="updateAll(this.value)" class="bg-stone-100 border border-stone-300 rounded px-1 md:px-2 py-1 text-[10px] md:text-xs outline-none cursor-pointer">
+                <select id="langSelect" onchange="updateAll(this.value)" class="bg-stone-50 border border-stone-200 rounded px-1 md:px-2 py-1 text-[10px] md:text-xs outline-none cursor-pointer text-stone-600">
                     <option value="zh-TW">繁中</option>
                     <option value="zh-CN">简体</option>
                     <option value="ko">한국어</option>
@@ -43,133 +64,207 @@
                     <option value="en">EN</option>
                 </select>
 
-                <div class="hidden md:flex items-center space-x-4 border-l border-stone-300 pl-6">
-                    <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="text-xl hover:text-pink-600 transition"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://line.me/ti/p/ID" target="_blank" class="text-xl hover:text-green-500 transition"><i class="fa-brands fa-line"></i></a>
-                    <button onclick="openModal()" data-i18n="book_now" class="bg-stone-800 text-white px-6 py-2 rounded-full hover:bg-stone-600 transition shadow-lg text-sm font-bold">立即預約</button>
+                <div class="hidden md:flex items-center space-x-4 border-l border-stone-200 pl-6 text-[#8C6A5E]">
+                    <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="text-xl hover:text-[#C2A383] transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://line.me/ti/p/ID" target="_blank" class="text-xl hover:text-[#06C755] transition"><i class="fa-brands fa-line"></i></a>
+                    <button onclick="openModal()" data-i18n="book_now" class="btn-luxury px-6 py-2 rounded-full text-sm font-bold shadow-md">立即預約</button>
                 </div>
 
-                <button onclick="openModal()" class="flex md:hidden bg-stone-800 text-white px-4 py-2 rounded-full text-[10px] font-bold shadow-md">預約 BOOK</button>
+                <button onclick="openModal()" class="flex md:hidden btn-luxury px-4 py-2 rounded-full text-[10px] font-bold shadow-md">預約 BOOK</button>
             </div>
         </div>
     </nav>
 
     <section class="relative h-screen flex items-center justify-center text-center hero-bg bg-cover bg-center">
         <div class="text-white px-4">
-            <p class="text-sm tracking-[0.5em] mb-4">HAIR STUDIO / BUSAN</p>
+            <p class="text-sm tracking-[0.5em] mb-4 font-light uppercase">Hair Studio / Busan</p>
             <h2 data-i18n="hero_title" class="text-4xl md:text-7xl font-light mb-8 leading-tight">在這裡，遇見更好的自己</h2>
-            <button onclick="openModal()" data-i18n="online_booking" class="inline-block border border-white px-10 py-4 text-xs md:text-sm tracking-widest hover:bg-white hover:text-black transition duration-500">ONLINE BOOKING</button>
+            <button onclick="openModal()" data-i18n="online_booking" class="inline-block border border-white/60 px-10 py-4 text-xs md:text-sm tracking-widest hover:bg-white hover:text-[#8C6A5E] transition duration-500">ONLINE BOOKING</button>
+        </div>
+    </section>
+
+    <section id="interior-tour" class="py-24 bg-[#FDFCFB] px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h3 class="text-2xl mb-4 tracking-[0.3em] uppercase text-[#8C6A5E] font-semibold">Immersive Space</h3>
+            <p class="text-stone-400 text-xs mb-12 tracking-widest uppercase">沉浸式空間體驗｜SALON DE JENNY</p>
+            
+            <div class="relative group h-[400px] md:h-[650px] rounded-[2rem] overflow-hidden shadow-2xl border border-[#E5DED5]">
+                <div id="tour-display" class="w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out scale-100 group-hover:scale-105" 
+                     style="background-image: url('A82F7E0B-683B-4DAB-9746-6C6298D20901.jpeg');">
+                    <div class="absolute inset-0 bg-black/5"></div>
+                </div>
+
+                <div id="dot-container" class="absolute bottom-10 left-1/2 -translate-x-1/2 flex space-x-4 z-10">
+                    </div>
+
+                <div class="absolute top-10 left-10 text-left bg-white/80 backdrop-blur-md px-6 py-3 rounded-full border border-[#C2A383]/30">
+                    <p id="view-title" class="text-[10px] tracking-[0.2em] text-[#8C6A5E] font-bold uppercase">Loading...</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="services" class="py-24 bg-white px-6">
         <div class="max-w-6xl mx-auto text-center">
-            <h3 data-i18n="about_title" class="text-2xl mb-16 tracking-widest uppercase text-stone-700 font-semibold">Service & Price</h3>
+            <h3 data-i18n="about_title" class="text-2xl mb-16 tracking-widest uppercase text-[#8C6A5E] font-semibold">Service & Price</h3>
             <div class="grid md:grid-cols-3 gap-12">
-                <div class="space-y-4">
+                <div class="space-y-4 p-8 rounded-2xl bg-stone-50 border border-stone-100 glow-effect transition-all">
                     <h4 data-i18n="service_1" class="text-lg font-medium">韓式剪髮</h4>
-                    <p class="text-stone-400 text-xs italic font-sans">Base: KRW 50,000</p>
-                    <p class="text-2xl font-bold currency-box text-stone-800" data-price-krw="50000">---</p>
+                    <p class="text-stone-400 text-xs italic">Base: KRW 50,000</p>
+                    <p class="text-3xl font-bold currency-box text-[#8C6A5E]" data-price-krw="50000">---</p>
                 </div>
-                <div class="space-y-4">
+                <div class="space-y-4 p-8 rounded-2xl bg-stone-50 border border-stone-100 glow-effect transition-all">
                     <h4 data-i18n="service_2" class="text-lg font-medium">設計染髮</h4>
-                    <p class="text-stone-400 text-xs italic font-sans">Base: KRW 150,000</p>
-                    <p class="text-2xl font-bold currency-box text-stone-800" data-price-krw="150000">---</p>
+                    <p class="text-stone-400 text-xs italic">Base: KRW 150,000</p>
+                    <p class="text-3xl font-bold currency-box text-[#8C6A5E]" data-price-krw="150000">---</p>
                 </div>
-                <div class="space-y-4">
+                <div class="space-y-4 p-8 rounded-2xl bg-stone-50 border border-stone-100 glow-effect transition-all">
                     <h4 data-i18n="service_3" class="text-lg font-medium">深層護理</h4>
-                    <p class="text-stone-400 text-xs italic font-sans">Base: KRW 80,000</p>
-                    <p class="text-2xl font-bold currency-box text-stone-800" data-price-krw="80000">---</p>
+                    <p class="text-stone-400 text-xs italic">Base: KRW 80,000</p>
+                    <p class="text-3xl font-bold currency-box text-[#8C6A5E]" data-price-krw="80000">---</p>
                 </div>
             </div>
-            <p class="mt-12 text-[10px] text-stone-400 tracking-widest">* 匯率為每日自動更新即時換算 / Exchange rates updated daily.</p>
+            <p class="mt-12 text-[10px] text-stone-400 tracking-widest uppercase">* 匯率每日更新 / Rates updated daily.</p>
         </div>
     </section>
 
-    <section id="contact" class="py-20 bg-stone-100 border-y border-stone-200 text-center">
-        <h3 data-i18n="connect_title" class="text-xl mb-10 tracking-widest uppercase">Connect with Jenny</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto px-6">
-            <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="bg-white py-6 rounded-lg shadow-sm hover:shadow-md transition"><i class="fa-brands fa-instagram text-3xl text-pink-600 mb-2"></i><p class="text-[10px] font-bold">Instagram</p></a>
-            <a href="https://line.me/ti/p/ID" target="_blank" class="bg-line py-6 rounded-lg text-white shadow-sm hover:shadow-md transition"><i class="fa-brands fa-line text-3xl mb-2"></i><p class="text-[10px] font-bold">Line</p></a>
-            <a href="https://open.kakao.com/o/LINK" target="_blank" class="bg-kakao py-6 rounded-lg text-kakao-brown shadow-sm hover:shadow-md transition"><i class="fa-solid fa-comment text-3xl mb-2"></i><p class="text-[10px] font-bold">KakaoTalk</p></a>
-            <div class="bg-[#07C160] py-6 rounded-lg text-white shadow-sm hover:shadow-md transition cursor-pointer relative group">
+    <section id="contact" class="py-20 bg-[#F2EEE8] border-y border-stone-200 text-center px-6">
+        <h3 data-i18n="connect_title" class="text-xl mb-10 tracking-widest uppercase text-[#8C6A5E]">Connect with Jenny</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+            <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="bg-white py-8 rounded-xl shadow-sm hover:shadow-md transition">
+                <i class="fa-brands fa-instagram text-3xl text-pink-600 mb-2"></i>
+                <p class="text-[10px] font-bold text-stone-500 uppercase">Instagram</p>
+            </a>
+            <a href="https://line.me/ti/p/ID" target="_blank" class="bg-[#06C755] py-8 rounded-xl text-white shadow-sm hover:shadow-md transition">
+                <i class="fa-brands fa-line text-3xl mb-2"></i>
+                <p class="text-[10px] font-bold uppercase">Line</p>
+            </a>
+            <a href="https://open.kakao.com/o/LINK" target="_blank" class="bg-[#FEE500] py-8 rounded-xl text-[#3A1D1D] shadow-sm hover:shadow-md transition">
+                <i class="fa-solid fa-comment text-3xl mb-2"></i>
+                <p class="text-[10px] font-bold uppercase">KakaoTalk</p>
+            </a>
+            <div class="bg-[#03C75A] py-8 rounded-xl text-white shadow-sm hover:shadow-md transition cursor-pointer group relative">
                 <i class="fa-brands fa-weixin text-3xl mb-2"></i>
-                <p class="text-[10px] font-bold">WeChat</p>
-                <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">ID: jenny_wechat</div>
+                <p class="text-[10px] font-bold uppercase">WeChat</p>
+                <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#5C534D] text-white text-[10px] px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition shadow-lg">ID: jenny_wechat</div>
             </div>
         </div>
     </section>
 
-    <section id="location" class="py-20 bg-white px-6">
+    <section id="location" class="py-24 bg-white px-6">
         <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
             <div class="space-y-6 text-center md:text-left">
-                <h3 class="text-2xl tracking-widest uppercase text-stone-700 font-semibold">Studio Info</h3>
-                <div class="w-12 h-[1px] bg-stone-300 mx-auto md:mx-0"></div>
+                <h3 class="text-2xl tracking-widest uppercase text-[#8C6A5E] font-semibold">Studio Info</h3>
+                <div class="w-12 h-[1px] bg-[#C2A383] mx-auto md:mx-0"></div>
                 <div class="space-y-4 text-stone-500 text-sm leading-relaxed">
-                    <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-location-dot text-stone-400"></i><span>Busan, South Korea (釜山, 南韓)</span></p>
-                    <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-phone text-stone-400"></i><span>+82 10-XXXX-XXXX</span></p>
-                    <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-envelope text-stone-400"></i><span>jenny.salon@example.com</span></p>
-                    <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-clock text-stone-400"></i><span>Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)</span></p>
+                    <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-location-dot text-[#C2A383]"></i><span>Busan, South Korea (釜山, 南韓)</span></p>
+                    <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-phone text-[#C2A383]"></i><span>+82 10-XXXX-XXXX</span></p>
+                    <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-envelope text-[#C2A383]"></i><span>jenny.salon@example.com</span></p>
+                    <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-clock text-[#C2A383]"></i><span>Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)</span></p>
                 </div>
                 <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 pt-4">
-                    <a href="#" target="_blank" class="inline-block border border-stone-800 px-8 py-3 text-[10px] tracking-widest hover:bg-stone-800 hover:text-white transition text-center">GOOGLE MAPS</a>
-                    <a href="https://map.naver.com/" target="_blank" class="inline-block bg-naver text-white px-8 py-3 text-[10px] tracking-widest hover:bg-[#029b46] transition text-center font-bold">NAVER MAP</a>
+                    <a href="#" target="_blank" class="inline-block border border-[#8C6A5E] text-[#8C6A5E] px-8 py-3 text-[10px] tracking-widest hover:bg-[#8C6A5E] hover:text-white transition rounded-full text-center">GOOGLE MAPS</a>
+                    <a href="https://map.naver.com/" target="_blank" class="inline-block bg-[#03C75A] text-white px-8 py-3 text-[10px] tracking-widest hover:bg-[#029b46] transition rounded-full shadow-md text-center font-bold">NAVER MAP</a>
                 </div>
             </div>
-            <div class="h-64 bg-stone-100 rounded-2xl border border-stone-200 flex items-center justify-center">
-                <div class="text-center text-stone-400"><i class="fa-solid fa-map-location-dot text-4xl mb-2"></i><p class="text-xs italic">Location Preview</p></div>
+            <div class="h-64 md:h-80 bg-[#F2EEE8] rounded-3xl border border-stone-100 flex items-center justify-center shadow-inner overflow-hidden relative group">
+                 <div class="text-center text-stone-300 group-hover:scale-110 transition duration-700"><i class="fa-solid fa-map-location-dot text-4xl mb-2"></i><p class="text-[10px] italic uppercase tracking-widest">Map Preview</p></div>
             </div>
         </div>
     </section>
 
     <div id="bookingModal">
-        <div class="bg-white w-full max-w-md mx-4 p-8 rounded-2xl shadow-2xl relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 text-2xl hover:text-black">&times;</button>
-            <h3 data-i18n="modal_title" class="text-2xl mb-6 text-center tracking-widest font-semibold">線上預約諮詢</h3>
-            
-            <form id="bookingForm" class="space-y-4 text-left">
-                <input type="text" id="name" data-i18n-placeholder="name_placeholder" placeholder="姓名 Name" required class="w-full border p-3 rounded-lg outline-none">
-                <input type="email" id="email" data-i18n-placeholder="email_placeholder" placeholder="Email (必填)" required class="w-full border p-3 rounded-lg outline-none">
-                <input type="tel" id="phone" data-i18n-placeholder="phone_placeholder" placeholder="電話 Phone (選填)" class="w-full border p-3 rounded-lg outline-none">
+        <div class="bg-[#FDFCFB] w-full max-w-md mx-4 p-10 rounded-3xl shadow-2xl relative border border-stone-100">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-stone-300 text-2xl hover:text-[#8C6A5E] transition">&times;</button>
+            <h3 data-i18n="modal_title" class="text-2xl mb-8 text-center tracking-widest font-semibold text-[#8C6A5E]">線上預約諮詢</h3>
+            <form id="bookingForm" class="space-y-5 text-left">
+                <input type="text" id="name" data-i18n-placeholder="name_placeholder" placeholder="姓名 Name" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383] transition">
+                <input type="email" id="email" data-i18n-placeholder="email_placeholder" placeholder="Email (必填)" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383] transition">
+                <input type="tel" id="phone" data-i18n-placeholder="phone_placeholder" placeholder="電話 Phone (選填)" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383] transition">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="date" required class="w-full border p-3 rounded-lg text-sm">
-                    <input type="time" id="time" required class="w-full border p-3 rounded-lg text-sm">
+                    <input type="date" id="date" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none focus:border-[#C2A383]">
+                    <input type="time" id="time" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none focus:border-[#C2A383]">
                 </div>
-                <select id="service" class="w-full border p-3 rounded-lg text-sm bg-white outline-none">
+                <select id="service" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none focus:border-[#C2A383] cursor-pointer">
                     <option value="Cut">Cut / 剪髮</option>
                     <option value="Color">Color / 染髮</option>
                     <option value="Treatment">Treatment / 護理</option>
                     <option value="Perm">Perm / 燙髮</option>
                 </select>
-                <select id="length" class="w-full border p-3 rounded-lg text-sm bg-white outline-none" required>
+                <select id="length" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none focus:border-[#C2A383] cursor-pointer" required>
                     <option value="" disabled selected data-i18n="length_title">頭髮長度 / Length</option>
                     <option value="Short" data-i18n="len_1">極短髮 (耳朵以上)</option>
                     <option value="Medium" data-i18n="len_2">中長髮 (肩下胸上)</option>
                     <option value="Long" data-i18n="len_3">長髮 (過胸)</option>
                 </select>
-                <button type="submit" id="submitBtn" data-i18n="submit_btn" class="w-full bg-stone-800 text-white py-4 rounded-lg font-bold tracking-widest hover:bg-black transition">確認送出預約</button>
+                <button type="submit" id="submitBtn" data-i18n="submit_btn" class="btn-luxury w-full py-5 rounded-xl font-bold tracking-widest shadow-lg">確認送出預約</button>
             </form>
         </div>
     </div>
 
-    <footer class="py-10 text-center text-[10px] text-stone-400 tracking-[0.3em] uppercase bg-stone-50">
+    <footer class="py-12 text-center text-[10px] text-stone-400 tracking-[0.4em] uppercase bg-[#F2EEE8]">
         &copy; 2026 SALON OF JENNY.
     </footer>
 
     <script>
-        // 更新為你最新的 Google Apps Script 網址
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbXS-OFzYxYeXPbexxI2_YZ6xnHqMkd1TDgaZXkoFJzjyQi9GA0nzDZqN-iRTTLaYK/exec"; 
+
+        const tourImages = [
+            { url: 'overlook_2.jpeg', title: 'Panorama Overview' },
+            { url: 'sea.jpeg', title: 'Sunlight Reception' },
+            { url: 'rest.jpeg', title: 'Brand Identity' },
+            { url: 'side_view_1.jpeg', title: 'Lounge Area' },
+            { url: 'main.jpeg', title: 'Styling Zone' },
+            { url: 'side_view', title: 'Interior Details' },
+            { url: 'front.jpeg', title: 'Your Seat' }
+        ];
 
         const translations = {
             'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': '線上預約', 'about_title': '服務價目', 'service_1': '韓式剪髮', 'service_2': '設計染髮', 'service_3': '深層護理', 'connect_title': '聯絡 Jenny', 'modal_title': '線上預約諮詢', 'submit_btn': '確認送出預約', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '電話 Phone (選填)', 'success': '預約已送出！', 'length_title': '頭髮長度 / Length', 'len_1': '極短髮 (耳朵以上)', 'len_2': '中長髮 (肩下胸上)', 'len_3': '長髮 (過胸)' },
             'zh-CN': { 'book_now': '立即预约', 'hero_title': '在这里，遇見更好的自己', 'online_booking': '在线预约', 'about_title': '服务价目', 'service_1': '韓式剪髮', 'service_2': '设计染髮', 'service_3': '深层护理', 'connect_title': '联络 Jenny', 'modal_title': '在线预约咨询', 'submit_btn': '确认提交预约', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '电话 Phone (选填)', 'success': '预约已提交！', 'length_title': '头发长度 / Length', 'len_1': '短发 (耳上)', 'len_2': '中长发 (肩下)', 'len_3': '长发 (过胸)' },
             'ko': { 'book_now': '지금 예약하기', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': '서비스 및 가격', 'service_1': '한국식 커트', 'service_2': '디자인 컬러', 'service_3': '클리닉 케어', 'connect_title': '제니와 연결하기', 'modal_title': '온라인 예약 상담', 'submit_btn': '예약 확정하기', 'name_placeholder': '이름 Name', 'email_placeholder': '이메일 (필수)', 'phone_placeholder': '전화번호 (선택)', 'success': '예약이 접수되었습니다!', 'length_title': '모발 길이 / Length', 'len_1': '숏 / 단발 (귀 위)', 'len_2': '중간 / 미디엄 (어깨 밑)', 'len_3': '롱 (가슴 밑)' },
-            'ja': { 'book_now': '今すぐ予約', 'hero_title': 'ここで、より良い自分に出會う', 'online_booking': 'オンライン予約', 'about_title': '料金表', 'service_1': '韓国風カット', 'service_2': 'デザインカラー', 'service_3': 'ヘアケア', 'connect_title': 'ジェニーに連絡', 'modal_title': 'オンライン予約相談', 'submit_btn': '予約を確定する', 'name_placeholder': 'お名前 Name', 'email_placeholder': 'メール (必須)', 'phone_placeholder': '電話番号 (任意)', 'success': '予約が送信されました！', 'length_title': '髪の長さ / Length', 'len_1': 'ショート (耳上)', 'len_2': 'ミディアム (肩下)', 'len_3': 'ロング (胸下)' },
+            'ja': { 'book_now': '今すぐ予約', 'hero_title': 'ここで、より良い自分に出會う', 'online_booking': 'オンライン予約', 'about_title': '料金表', 'service_1': '韓國風カット', 'service_2': 'デザインカラー', 'service_3': 'ヘアケア', 'connect_title': 'ジェニーに連絡', 'modal_title': 'オンライン予約相談', 'submit_btn': '予約を確定する', 'name_placeholder': 'お名前 Name', 'email_placeholder': 'メール (必須)', 'phone_placeholder': '電話番号 (任意)', 'success': '予約が送信されました！', 'length_title': '髪の長さ / Length', 'len_1': 'ショート (耳上)', 'len_2': 'ミディアム (肩下)', 'len_3': 'ロング (胸下)' },
             'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style, Meet Yourself', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'service_1': 'Korean Cut', 'service_2': 'Design Color', 'service_3': 'Hair Clinic', 'connect_title': 'Connect with Jenny', 'modal_title': 'Reservation Inquiry', 'submit_btn': 'Confirm Booking', 'name_placeholder': 'Name', 'email_placeholder': 'Email (Required)', 'phone_placeholder': 'Phone (Optional)', 'success': 'Booking sent successfully!', 'length_title': 'Hair Length', 'len_1': 'Short (Above Ear)', 'len_2': 'Medium (Below Shoulder)', 'len_3': 'Long (Past Chest)' }
         };
 
         const currencyMap = { 'zh-TW': 'TWD', 'zh-CN': 'CNY', 'ko': 'KRW', 'ja': 'JPY', 'en': 'USD' };
         let exchangeRates = {};
+        let currentTourIndex = 0;
+
+        // 3D 導覽邏輯
+        function initTour() {
+            const container = document.getElementById('dot-container');
+            tourImages.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'nav-dot w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white border border-white/20';
+                dot.onclick = () => manualChange(i);
+                container.appendChild(dot);
+            });
+            updateTourDisplay(0);
+            setInterval(() => {
+                currentTourIndex = (currentTourIndex + 1) % tourImages.length;
+                updateTourDisplay(currentTourIndex);
+            }, 5000);
+        }
+
+        function updateTourDisplay(index) {
+            const display = document.getElementById('tour-display');
+            const title = document.getElementById('view-title');
+            const dots = document.querySelectorAll('.nav-dot');
+            
+            display.style.backgroundImage = `url('${tourImages[index].url}')`;
+            title.innerText = tourImages[index].title;
+
+            dots.forEach((dot, i) => {
+                dot.style.width = i === index ? '24px' : '10px';
+                dot.style.backgroundColor = i === index ? '#C2A383' : 'rgba(255,255,255,0.4)';
+            });
+        }
+
+        function manualChange(index) {
+            currentTourIndex = index;
+            updateTourDisplay(index);
+        }
 
         async function fetchRates() {
             try {
@@ -201,7 +296,10 @@
             });
         }
 
-        window.onload = fetchRates;
+        window.onload = () => {
+            fetchRates();
+            initTour();
+        };
 
         const modal = document.getElementById('bookingModal');
         function openModal() { modal.classList.add('active'); }
@@ -222,7 +320,7 @@
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value, 
                 service: document.getElementById('service').value,
-                length: document.getElementById('length').value // 加入髮量/長度數據
+                length: document.getElementById('length').value
             };
 
             try {
