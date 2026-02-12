@@ -54,7 +54,7 @@
 
     <section class="relative h-screen flex items-center justify-center text-center hero-bg bg-cover bg-center">
         <div class="text-white px-4">
-            <p class="text-sm tracking-[0.5em] mb-4">HAIR STUDIO / TAIPEI</p>
+            <p class="text-sm tracking-[0.5em] mb-4">HAIR STUDIO / BUSAN</p>
             <h2 data-i18n="hero_title" class="text-4xl md:text-7xl font-light mb-8 leading-tight">在這裡，遇見更好的自己</h2>
             <button onclick="openModal()" data-i18n="online_booking" class="inline-block border border-white px-10 py-4 text-xs md:text-sm tracking-widest hover:bg-white hover:text-black transition duration-500">ONLINE BOOKING</button>
         </div>
@@ -109,7 +109,6 @@
                     <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-envelope text-stone-400"></i><span>jenny.salon@example.com</span></p>
                     <p class="flex items-center justify-center md:justify-start space-x-3"><i class="fa-solid fa-clock text-stone-400"></i><span>Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)</span></p>
                 </div>
-                
                 <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 pt-4">
                     <a href="#" target="_blank" class="inline-block border border-stone-800 px-8 py-3 text-[10px] tracking-widest hover:bg-stone-800 hover:text-white transition text-center">GOOGLE MAPS</a>
                     <a href="https://map.naver.com/" target="_blank" class="inline-block bg-naver text-white px-8 py-3 text-[10px] tracking-widest hover:bg-[#029b46] transition text-center font-bold">NAVER MAP</a>
@@ -125,6 +124,7 @@
         <div class="bg-white w-full max-w-md mx-4 p-8 rounded-2xl shadow-2xl relative">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 text-2xl hover:text-black">&times;</button>
             <h3 data-i18n="modal_title" class="text-2xl mb-6 text-center tracking-widest font-semibold">線上預約諮詢</h3>
+            
             <form id="bookingForm" class="space-y-4 text-left">
                 <input type="text" id="name" data-i18n-placeholder="name_placeholder" placeholder="姓名 Name" required class="w-full border p-3 rounded-lg outline-none">
                 <input type="email" id="email" data-i18n-placeholder="email_placeholder" placeholder="Email (必填)" required class="w-full border p-3 rounded-lg outline-none">
@@ -134,9 +134,16 @@
                     <input type="time" id="time" required class="w-full border p-3 rounded-lg text-sm">
                 </div>
                 <select id="service" class="w-full border p-3 rounded-lg text-sm bg-white outline-none">
-                    <option value="Cut">Cut</option>
-                    <option value="Color">Color</option>
-                    <option value="Treatment">Treatment</option>
+                    <option value="Cut">Cut / 剪髮</option>
+                    <option value="Color">Color / 染髮</option>
+                    <option value="Treatment">Treatment / 護理</option>
+                    <option value="Perm">Perm / 燙髮</option>
+                </select>
+                <select id="length" class="w-full border p-3 rounded-lg text-sm bg-white outline-none" required>
+                    <option value="" disabled selected data-i18n="length_title">頭髮長度 / Length</option>
+                    <option value="Short" data-i18n="len_1">極短髮 (耳朵以上)</option>
+                    <option value="Medium" data-i18n="len_2">中長髮 (肩下胸上)</option>
+                    <option value="Long" data-i18n="len_3">長髮 (過胸)</option>
                 </select>
                 <button type="submit" id="submitBtn" data-i18n="submit_btn" class="w-full bg-stone-800 text-white py-4 rounded-lg font-bold tracking-widest hover:bg-black transition">確認送出預約</button>
             </form>
@@ -148,14 +155,15 @@
     </footer>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvAiGb7TLLV7GavOM9E40_G3r_uNb8_qRBrb2FaaN-_220xrdCr63Z2-gr-kuzQqbs/exec"; 
+        // 更新為你最新的 Google Apps Script 網址
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbXS-OFzYxYeXPbexxI2_YZ6xnHqMkd1TDgaZXkoFJzjyQi9GA0nzDZqN-iRTTLaYK/exec"; 
 
         const translations = {
-            'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': '線上預約', 'about_title': '服務價目', 'service_1': '韓式剪髮', 'service_2': '設計染髮', 'service_3': '深層護理', 'connect_title': '聯絡 Jenny', 'modal_title': '線上預約諮詢', 'submit_btn': '確認送出預約', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '電話 Phone (選填)', 'success': '預約已送出！' },
-            'zh-CN': { 'book_now': '立即预约', 'hero_title': '在这里，遇見更好的自己', 'online_booking': '在线预约', 'about_title': '服务价目', 'service_1': '韓式剪髮', 'service_2': '设计染髮', 'service_3': '深层护理', 'connect_title': '联络 Jenny', 'modal_title': '在线预约咨询', 'submit_btn': '确认提交预约', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '电话 Phone (选填)', 'success': '预约已提交！' },
-            'ko': { 'book_now': '지금 예약하기', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': '서비스 및 가격', 'service_1': '한국식 커트', 'service_2': '디자인 컬러', 'service_3': '클리닉 케어', 'connect_title': '제니와 연결하기', 'modal_title': '온라인 예약 상담', 'submit_btn': '예약 확정하기', 'name_placeholder': '이름 Name', 'email_placeholder': '이메일 (필수)', 'phone_placeholder': '전화번호 (선택)', 'success': '예약이 접수되었습니다!' },
-            'ja': { 'book_now': '今すぐ予約', 'hero_title': 'ここで、より良い自分に出會う', 'online_booking': 'オンライン予約', 'about_title': '料金表', 'service_1': '韓國風カット', 'service_2': 'デザインカラー', 'service_3': 'ヘアケア', 'connect_title': 'ジェニーに連絡', 'modal_title': 'オンライン予約相談', 'submit_btn': '予約を確定する', 'name_placeholder': 'お名前 Name', 'email_placeholder': 'メール (必須)', 'phone_placeholder': '電話番号 (任意)', 'success': '予約が送信されました！' },
-            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style, Meet Yourself', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'service_1': 'Korean Cut', 'service_2': 'Design Color', 'service_3': 'Hair Clinic', 'connect_title': 'Connect with Jenny', 'modal_title': 'Reservation Inquiry', 'submit_btn': 'Confirm Booking', 'name_placeholder': 'Name', 'email_placeholder': 'Email (Required)', 'phone_placeholder': 'Phone (Optional)', 'success': 'Booking sent successfully!' }
+            'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': '線上預約', 'about_title': '服務價目', 'service_1': '韓式剪髮', 'service_2': '設計染髮', 'service_3': '深層護理', 'connect_title': '聯絡 Jenny', 'modal_title': '線上預約諮詢', 'submit_btn': '確認送出預約', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '電話 Phone (選填)', 'success': '預約已送出！', 'length_title': '頭髮長度 / Length', 'len_1': '極短髮 (耳朵以上)', 'len_2': '中長髮 (肩下胸上)', 'len_3': '長髮 (過胸)' },
+            'zh-CN': { 'book_now': '立即预约', 'hero_title': '在这里，遇見更好的自己', 'online_booking': '在线预约', 'about_title': '服务价目', 'service_1': '韓式剪髮', 'service_2': '设计染髮', 'service_3': '深层护理', 'connect_title': '联络 Jenny', 'modal_title': '在线预约咨询', 'submit_btn': '确认提交预约', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '电话 Phone (选填)', 'success': '预约已提交！', 'length_title': '头发长度 / Length', 'len_1': '短发 (耳上)', 'len_2': '中长发 (肩下)', 'len_3': '长发 (过胸)' },
+            'ko': { 'book_now': '지금 예약하기', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': '서비스 및 가격', 'service_1': '한국식 커트', 'service_2': '디자인 컬러', 'service_3': '클리닉 케어', 'connect_title': '제니와 연결하기', 'modal_title': '온라인 예약 상담', 'submit_btn': '예약 확정하기', 'name_placeholder': '이름 Name', 'email_placeholder': '이메일 (필수)', 'phone_placeholder': '전화번호 (선택)', 'success': '예약이 접수되었습니다!', 'length_title': '모발 길이 / Length', 'len_1': '숏 / 단발 (귀 위)', 'len_2': '중간 / 미디엄 (어깨 밑)', 'len_3': '롱 (가슴 밑)' },
+            'ja': { 'book_now': '今すぐ予約', 'hero_title': 'ここで、より良い自分に出會う', 'online_booking': 'オンライン予約', 'about_title': '料金表', 'service_1': '韓国風カット', 'service_2': 'デザインカラー', 'service_3': 'ヘアケア', 'connect_title': 'ジェニーに連絡', 'modal_title': 'オンライン予約相談', 'submit_btn': '予約を確定する', 'name_placeholder': 'お名前 Name', 'email_placeholder': 'メール (必須)', 'phone_placeholder': '電話番号 (任意)', 'success': '予約が送信されました！', 'length_title': '髪の長さ / Length', 'len_1': 'ショート (耳上)', 'len_2': 'ミディアム (肩下)', 'len_3': 'ロング (胸下)' },
+            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style, Meet Yourself', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'service_1': 'Korean Cut', 'service_2': 'Design Color', 'service_3': 'Hair Clinic', 'connect_title': 'Connect with Jenny', 'modal_title': 'Reservation Inquiry', 'submit_btn': 'Confirm Booking', 'name_placeholder': 'Name', 'email_placeholder': 'Email (Required)', 'phone_placeholder': 'Phone (Optional)', 'success': 'Booking sent successfully!', 'length_title': 'Hair Length', 'len_1': 'Short (Above Ear)', 'len_2': 'Medium (Below Shoulder)', 'len_3': 'Long (Past Chest)' }
         };
 
         const currencyMap = { 'zh-TW': 'TWD', 'zh-CN': 'CNY', 'ko': 'KRW', 'ja': 'JPY', 'en': 'USD' };
@@ -211,7 +219,8 @@
                 phone: document.getElementById('phone').value || '未提供',
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value, 
-                service: document.getElementById('service').value
+                service: document.getElementById('service').value,
+                length: document.getElementById('length').value // 加入髮量/長度數據
             };
 
             try {
