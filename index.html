@@ -3,41 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salon of Jenny | Multi-Language & Booking</title>
+    <title>Salon of Jenny | Immersive Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;600&family=Noto+Sans+KR:wght@300;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
     <style>
         body { font-family: 'Noto Serif TC', 'Noto Sans KR', serif; scroll-behavior: smooth; }
         .bg-creamy { background-color: #F2EEE8; }
         .hero-bg {
-            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                              url('front.jpeg'); 
-            background-size: cover;
-            background-position: center;
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('front.jpeg'); 
+            background-size: cover; background-position: center;
         }
+        
+        .swiper { width: 100%; padding-top: 30px; padding-bottom: 50px; }
+        .swiper-slide {
+            background-position: center; background-size: cover;
+            width: 300px; height: 400px;
+            border-radius: 30px; overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        @media (min-width: 768px) { .swiper-slide { width: 550px; height: 400px; } }
+
         #bookingModal {
             display: none; position: fixed; inset: 0; background: rgba(58, 45, 40, 0.6);
             backdrop-filter: blur(8px); z-index: 100; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 0.3s ease;
         }
         #bookingModal.active { display: flex; opacity: 1; }
-        .btn-luxury {
-            background-color: #8C6A5E;
-            color: white;
-            transition: all 0.4s ease;
+        
+        .btn-luxury { background-color: #8C6A5E; color: white; transition: all 0.4s ease; }
+        .btn-luxury:hover { background-color: #C2A383; transform: translateY(-2px); }
+
+        .map-btn {
+            transition: all 0.3s ease;
+            border: 1px solid #D1C7BD;
+            color: #756D66;
         }
-        .btn-luxury:hover {
-            background-color: #C2A383;
-            transform: translateY(-2px);
-        }
-        .gallery-img {
-            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-        .gallery-item:hover .gallery-img {
-            transform: scale(1.05);
-        }
+        .map-btn:hover { background-color: #8C6A5E; color: white; border-color: #8C6A5E; }
+        .btn-naver { background-color: #58C068; color: white; border: none; }
+        .btn-naver:hover { background-color: #46a354; }
     </style>
 </head>
 <body class="bg-creamy text-[#4A443F]">
@@ -45,131 +53,170 @@
     <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-[#E5DED5]">
         <div class="max-w-7xl mx-auto px-4 md:px-6 h-20 flex justify-between items-center">
             <h1 class="text-lg md:text-xl font-semibold tracking-[0.2em] text-[#5C534D] cursor-pointer" onclick="window.scrollTo(0,0)">SALON OF JENNY</h1>
-            
-            <div class="flex items-center space-x-2 md:space-x-6">
-                <select id="langSelect" onchange="updateAll(this.value)" class="bg-stone-50 border border-stone-200 rounded px-1 md:px-2 py-1 text-[10px] md:text-xs outline-none cursor-pointer text-stone-600">
+            <div class="flex items-center space-x-3 md:space-x-6">
+                <select id="langSelect" onchange="updateAll(this.value)" class="bg-transparent border border-stone-200 rounded px-2 py-1 text-xs outline-none">
                     <option value="zh-TW">繁中</option>
-                    <option value="zh-CN">简体</option>
                     <option value="ko">한국어</option>
-                    <option value="ja">日本語</option>
                     <option value="en">EN</option>
                 </select>
-                <div class="hidden md:flex items-center space-x-4 border-l border-stone-200 pl-6 text-[#8C6A5E]">
-                    <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="text-xl hover:text-[#C2A383] transition"><i class="fa-brands fa-instagram"></i></a>
-                    <button onclick="openModal()" data-i18n="book_now" class="btn-luxury px-6 py-2 rounded-full text-sm font-bold shadow-md">立即預約</button>
+                <div class="hidden md:flex items-center space-x-4 border-l pl-4 border-stone-200 text-stone-600">
+                    <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="hover:text-[#8C6A5E] transition"><i class="fa-brands fa-instagram text-xl"></i></a>
+                    <a href="https://pf.kakao.com/" target="_blank" class="hover:text-[#8C6A5E] transition"><i class="fa-comment text-xl"></i></a>
+                    <a href="https://line.me/" target="_blank" class="hover:text-[#8C6A5E] transition"><i class="fa-brands fa-line text-xl"></i></a>
                 </div>
-                <button onclick="openModal()" class="flex md:hidden btn-luxury px-4 py-2 rounded-full text-[10px] font-bold shadow-md">預約 BOOK</button>
+                <button onclick="openModal()" data-i18n="book_now" class="btn-luxury px-5 py-2 rounded-lg text-sm font-medium shadow-sm">立即預約</button>
             </div>
         </div>
     </nav>
 
-    <section class="relative h-screen flex items-center justify-center text-center hero-bg bg-cover bg-center">
+    <section class="relative h-[85vh] flex items-center justify-center text-center hero-bg">
         <div class="text-white px-4">
-            <p class="text-sm tracking-[0.5em] mb-4 font-light uppercase">Hair Studio / Busan</p>
-            <h2 data-i18n="hero_title" class="text-4xl md:text-7xl font-light mb-8 leading-tight">在這裡，遇見更好的自己</h2>
-            <button onclick="openModal()" data-i18n="online_booking" class="inline-block border border-white/60 px-10 py-4 text-xs md:text-sm tracking-widest hover:bg-white hover:text-[#8C6A5E] transition duration-500">ONLINE BOOKING</button>
+            <p class="text-xs tracking-[0.5em] mb-4 font-light uppercase">Hair Studio / Busan</p>
+            <h2 data-i18n="hero_title" class="text-4xl md:text-6xl font-light mb-8 leading-tight tracking-wide">在這裡，遇見更好的自己</h2>
+            <button onclick="openModal()" data-i18n="online_booking" class="inline-block border border-white/60 px-10 py-3 text-xs tracking-widest hover:bg-white hover:text-[#8C6A5E] transition duration-500">ONLINE BOOKING</button>
         </div>
     </section>
 
-    <section id="tour" class="py-24 bg-creamy px-6">
-        <div class="max-w-7xl mx-auto">
-            <h3 data-i18n="tour_title" class="text-2xl mb-12 tracking-widest text-center uppercase text-[#8C6A5E] font-semibold">Studio Tour</h3>
-            <div id="imageGallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+    <section id="tour" class="py-20 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto text-center px-6">
+            <h3 data-i18n="tour_title" class="text-xl mb-2 tracking-widest uppercase text-[#8C6A5E] font-semibold">Studio Tour</h3>
+            <p class="text-stone-400 text-[10px] tracking-[0.3em] uppercase mb-8">Immersive Experience</p>
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper" id="swiperWrapper"></div>
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
     </section>
 
-    <section id="services" class="py-24 bg-white px-6">
+    <section id="services" class="py-24 bg-creamy px-6">
         <div class="max-w-6xl mx-auto text-center">
-            <h3 data-i18n="about_title" class="text-2xl mb-16 tracking-widest uppercase text-[#8C6A5E] font-semibold">Service & Price</h3>
-            <div class="grid md:grid-cols-3 gap-12">
-                <div class="space-y-4 p-8 rounded-2xl bg-stone-50 border border-stone-100 text-center">
-                    <h4 data-i18n="service_1" class="text-lg font-medium text-[#5C534D]">韓式剪髮</h4>
+            <div class="mb-16">
+                <h3 data-i18n="about_title" class="text-2xl tracking-widest uppercase text-[#8C6A5E] font-semibold">Service & Price</h3>
+                <div class="w-12 h-[1px] bg-stone-300 mx-auto mt-4"></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="p-10 rounded-[40px] bg-white border border-stone-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                    <h4 data-i18n="service_1" class="text-lg font-medium mb-4 text-[#5C534D]">韓式剪髮</h4>
                     <p class="text-3xl font-bold currency-box text-[#8C6A5E]" data-price-krw="50000">---</p>
                 </div>
-                <div class="space-y-4 p-8 rounded-2xl bg-stone-50 border border-stone-100 text-center">
-                    <h4 data-i18n="service_2" class="text-lg font-medium text-[#5C534D]">設計染髮</h4>
+                <div class="p-10 rounded-[40px] bg-white border border-stone-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                    <h4 data-i18n="service_2" class="text-lg font-medium mb-4 text-[#5C534D]">設計染髮</h4>
                     <p class="text-3xl font-bold currency-box text-[#8C6A5E]" data-price-krw="150000">---</p>
                 </div>
-                <div class="space-y-4 p-8 rounded-2xl bg-stone-50 border border-stone-100 text-center">
-                    <h4 data-i18n="service_3" class="text-lg font-medium text-[#5C534D]">深層護理</h4>
+                <div class="p-10 rounded-[40px] bg-white border border-stone-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                    <h4 data-i18n="service_3" class="text-lg font-medium mb-4 text-[#5C534D]">深層護理</h4>
                     <p class="text-3xl font-bold currency-box text-[#8C6A5E]" data-price-krw="80000">---</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <div id="bookingModal">
-        <div class="bg-[#FDFCFB] w-full max-w-md mx-4 p-10 rounded-3xl shadow-2xl relative border border-stone-100">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-stone-300 text-2xl hover:text-[#8C6A5E] transition">&times;</button>
-            <h3 data-i18n="modal_title" class="text-2xl mb-8 text-center tracking-widest font-semibold text-[#8C6A5E]">線上預約諮詢</h3>
-            <form id="bookingForm" class="space-y-5 text-left">
-                <input type="text" id="name" data-i18n-placeholder="name_placeholder" placeholder="姓名 Name" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383]">
-                <input type="email" id="email" data-i18n-placeholder="email_placeholder" placeholder="Email" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383]">
-                <input type="tel" id="phone" data-i18n-placeholder="phone_placeholder" placeholder="電話 Phone" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383]">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="date" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none">
-                    <input type="time" id="time" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none">
+    <section id="info" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-8 md:px-12 flex flex-col md:flex-row items-center gap-16">
+            <div class="flex-1 space-y-8 text-left">
+                <div>
+                    <h3 data-i18n="info_title" class="text-3xl tracking-[0.1em] text-[#5C534D] mb-2 font-serif uppercase text-left">Studio Info</h3>
+                    <div class="w-12 h-[1px] bg-stone-400"></div>
                 </div>
-                <select id="service" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none">
+                <ul class="space-y-6 text-[#756D66] font-light tracking-wide text-sm">
+                    <li class="flex items-start space-x-4">
+                        <i class="fa-solid fa-location-dot mt-1 text-[#8C6A5E]"></i>
+                        <span>Busan, South Korea (釜山廣域市)</span>
+                    </li>
+                    <li class="flex items-center space-x-4">
+                        <i class="fa-solid fa-phone text-[#8C6A5E]"></i>
+                        <span>+82 10-XXXX-XXXX</span>
+                    </li>
+                    <li class="flex items-center space-x-4">
+                        <i class="fa-solid fa-clock text-[#8C6A5E]"></i>
+                        <span data-i18n="open_hours">Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)</span>
+                    </li>
+                </ul>
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <a href="https://maps.google.com" target="_blank" class="map-btn px-8 py-3 rounded-full text-[10px] tracking-[0.2em] font-bold uppercase shadow-sm">Google Maps</a>
+                    <a href="https://naver.me" target="_blank" class="btn-naver px-8 py-3 rounded-full text-[10px] tracking-[0.2em] font-bold uppercase shadow-lg shadow-green-100">Naver Map</a>
+                </div>
+            </div>
+            <div class="flex-1 w-full h-[400px] bg-[#F2EEE8] rounded-[50px] flex items-center justify-center border border-stone-100 relative overflow-hidden group shadow-inner">
+                <i class="fa-solid fa-map-location-dot text-white text-7xl drop-shadow-sm group-hover:scale-110 transition-transform duration-1000"></i>
+                <span class="absolute bottom-10 text-[10px] tracking-[0.5em] text-stone-400 uppercase font-bold">Map Preview</span>
+            </div>
+        </div>
+    </section>
+
+    <div id="bookingModal">
+        <div class="bg-[#FDFCFB] w-full max-w-md mx-4 p-10 rounded-[40px] shadow-2xl relative border border-stone-100 text-left">
+            <button onclick="closeModal()" class="absolute top-8 right-8 text-stone-300 text-2xl hover:text-stone-600 transition">×</button>
+            <h3 data-i18n="modal_title" class="text-2xl mb-8 text-center tracking-widest font-semibold text-[#8C6A5E]">線上預約諮詢</h3>
+            <form id="bookingForm" class="space-y-5">
+                <input type="text" id="name" data-i18n-placeholder="name_placeholder" placeholder="姓名 Name" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl outline-none focus:border-[#C2A383]">
+                <input type="email" id="email" data-i18n-placeholder="email_placeholder" placeholder="Email" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl outline-none focus:border-[#C2A383]">
+                <input type="tel" id="phone" placeholder="Phone" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl outline-none focus:border-[#C2A383]">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="date" id="date" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl text-sm outline-none">
+                    <input type="time" id="time" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl text-sm outline-none">
+                </div>
+                <select id="service" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl text-sm outline-none">
                     <option value="Cut">Cut / 剪髮</option>
                     <option value="Color">Color / 染髮</option>
                     <option value="Treatment">Treatment / 護理</option>
-                    <option value="Perm">Perm / 燙髮</option>
                 </select>
-                <select id="length" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none" required>
-                    <option value="" disabled selected data-i18n="length_title">頭髮長度 / Length</option>
-                    <option value="Short" data-i18n="len_1">極短髮 (耳朵以上)</option>
-                    <option value="Medium" data-i18n="len_2">中長髮 (肩下胸上)</option>
-                    <option value="Long" data-i18n="len_3">長髮 (過胸)</option>
+                <select id="length" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl text-sm outline-none">
+                    <option value="Short">Short / 短髮</option>
+                    <option value="Medium">Medium / 中長</option>
+                    <option value="Long">Long / 長髮</option>
                 </select>
-                <button type="submit" id="submitBtn" data-i18n="submit_btn" class="btn-luxury w-full py-5 rounded-xl font-bold tracking-widest shadow-lg">確認送出預約</button>
+                <button type="submit" id="submitBtn" data-i18n="submit_btn" class="btn-luxury w-full py-5 rounded-2xl font-bold tracking-widest">確認送出預約</button>
             </form>
         </div>
     </div>
 
-    <footer class="py-12 text-center text-[10px] text-stone-400 tracking-[0.4em] uppercase bg-[#F2EEE8]">
-        &copy; 2026 SALON OF JENNY.
+    <footer class="py-12 text-center text-[10px] text-stone-400 tracking-[0.4em] uppercase bg-white border-t border-stone-100">
+        © 2026 SALON OF JENNY.
     </footer>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx79WhnoEtxIBnI4AR7Q9YHKdc89zpMemXIcLA7af3aQ01HPWy88b00wYHa3c9nNXL3XA/exec"; 
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbo-NATR41TWm96_gWxFg0XSOwBuXOlZx-1TH5ZYF8Wz7ef89aohJM69QucRfvA3N9lg/exec";
 
         const tourImages = [
-            { url: 'overlook.jpeg', title: 'Panorama Overview' },
-            { url: 'sea.jpeg', title: 'Sunlight Reception' },
-            { url: 'main.jpeg', title: 'Brand Identity' },
-            { url: 'rest.jpeg', title: 'Lounge Area' },
-            { url: 'sideview.jpeg', title: 'Styling Zone' },
-            { url: 'front.jpeg', title: 'Your Seat' }
+            { url: 'overlook.jpeg', title: 'Panorama' },
+            { url: 'sea.jpeg', title: 'Reception' },
+            { url: 'main.jpeg', title: 'Studio' },
+            { url: 'rest.jpeg', title: 'Lounge' },
+            { url: 'sideview.jpeg', title: 'Styling' },
+            { url: 'front.jpeg', title: 'Your Mirror' }
         ];
 
-        const translations = {
-            'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': '線上預約', 'about_title': '服務價目', 'tour_title': '空間導覽', 'service_1': '韓式剪髮', 'service_2': '設計染髮', 'service_3': '深層護理', 'modal_title': '線上預約諮詢', 'submit_btn': '確認送出預約', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '電話 Phone (選填)', 'success': '預約已送出！確認信已寄到您的信箱。', 'length_title': '頭髮長度 / Length', 'len_1': '極短髮 (耳朵以上)', 'len_2': '中長髮 (肩下胸上)', 'len_3': '長髮 (過胸)' },
-            'ko': { 'book_now': '지금 예약', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': '가격표', 'tour_title': '스튜디오 투어', 'service_1': '커트', 'service_2': '염색', 'service_3': '클리닉', 'modal_title': '온라인 예약 상담', 'submit_btn': '예약 확정', 'name_placeholder': '이름', 'email_placeholder': '이메일', 'phone_placeholder': '전화번호', 'success': '예약이 완료되었습니다! 이메일을 확인해주세요.', 'length_title': '모발 길이', 'len_1': '숏', 'len_2': '미디엄', 'len_3': '롱' },
-            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style, Meet Yourself', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'tour_title': 'Studio Tour', 'service_1': 'Korean Cut', 'service_2': 'Design Color', 'service_3': 'Hair Clinic', 'modal_title': 'Reservation Inquiry', 'submit_btn': 'Confirm Booking', 'name_placeholder': 'Name', 'email_placeholder': 'Email (Required)', 'phone_placeholder': 'Phone (Optional)', 'success': 'Booking sent! Check your email.', 'length_title': 'Hair Length', 'len_1': 'Short (Above Ear)', 'len_2': 'Medium (Below Shoulder)', 'len_3': 'Long (Past Chest)' },
-            'ja': { 'book_now': '今すぐ予約', 'hero_title': 'ここで、より良い自分に出会う', 'online_booking': 'オンライン予約', 'about_title': '料金表', 'tour_title': '店内のご案内', 'service_1': 'カット', 'service_2': 'カラー', 'service_3': 'トリートメント', 'modal_title': 'オンライン予約相談', 'submit_btn': '予約を確定する', 'name_placeholder': 'お名前', 'email_placeholder': 'メール', 'phone_placeholder': '電話番号', 'success': '予約が送信されました！メールを確認してください。', 'length_title': '髪の長さ', 'len_1': 'ショート', 'len_2': 'ミディアム', 'len_3': 'ロング' },
-            'zh-CN': { 'book_now': '立即预约', 'hero_title': '在这里，遇见更好的自己', 'online_booking': '在线预约', 'about_title': '服务价目', 'tour_title': '空间導览', 'service_1': '韩式剪发', 'service_2': '设计染发', 'service_3': '深层护理', 'modal_title': '在线预约咨询', 'submit_btn': '确认送出预约', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '电话 Phone (选填)', 'success': '预约已送出！', 'length_title': '头发长度 / Length', 'len_1': '短发 (耳上)', 'len_2': '中长发 (肩下)', 'len_3': '长发 (过胸)' }
-        };
-
-        const currencyMap = { 'zh-TW': 'TWD', 'en': 'USD', 'ko': 'KRW', 'ja': 'JPY', 'zh-CN': 'CNY' };
-        let exchangeRates = { TWD: 0.024, USD: 0.00075, KRW: 1 };
-
-        // 初始化圖片
-        function initGallery() {
-            const container = document.getElementById('imageGallery');
+        function initSwiper() {
+            const wrapper = document.getElementById('swiperWrapper');
             tourImages.forEach(img => {
-                const item = document.createElement('div');
-                item.className = 'gallery-item overflow-hidden rounded-2xl shadow-lg relative bg-stone-200 aspect-[4/3] group';
-                item.innerHTML = `
-                    <img src="${img.url}" alt="${img.title}" class="gallery-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-end p-6">
-                        <span class="text-white text-xs tracking-widest opacity-0 group-hover:opacity-100 transition-opacity uppercase">${img.title}</span>
-                    </div>
-                `;
-                container.appendChild(item);
+                const slide = document.createElement('div');
+                slide.className = 'swiper-slide';
+                slide.style.backgroundImage = `url('${img.url}')`;
+                slide.innerHTML = `<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-8"><span class="text-white tracking-[0.3em] text-[10px] uppercase font-light">${img.title}</span></div>`;
+                wrapper.appendChild(slide);
+            });
+
+            new Swiper(".mySwiper", {
+                effect: "coverflow",
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: "auto",
+                coverflowEffect: { rotate: 20, stretch: 0, depth: 150, modifier: 1.5, slideShadows: true },
+                autoplay: { delay: 3500, disableOnInteraction: false },
+                pagination: { el: ".swiper-pagination", clickable: true },
+                loop: true
             });
         }
+
+        const translations = {
+            'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': 'ONLINE BOOKING', 'about_title': 'Service & Price', 'tour_title': 'Studio Tour', 'info_title': 'Studio Info', 'open_hours': 'Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)', 'modal_title': '預約諮詢', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email', 'submit_btn': '確認送出預約', 'success': '預約已送出，請檢查您的信箱。' },
+            'ko': { 'book_now': '지금 예약하기', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': 'Service & Price', 'tour_title': '스튜디오 투어', 'info_title': 'Studio Info', 'open_hours': '화 - 일: 10:00 AM - 08:00 PM (월요일 휴무)', 'modal_title': '예약 상담', 'name_placeholder': '성함', 'email_placeholder': '이메일', 'submit_btn': '예약 신청하기', 'success': '예약이 접수되었습니다. 이메일을 확인해 주세요.' },
+            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'tour_title': 'Space Tour', 'info_title': 'Studio Info', 'open_hours': 'Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)', 'modal_title': 'Booking Inquiry', 'name_placeholder': 'Name', 'email_placeholder': 'Email', 'submit_btn': 'Submit Booking', 'success': 'Booking sent! Please check your email.' }
+        };
+
+        const currencyMap = { 'zh-TW': 'TWD', 'en': 'USD', 'ko': 'KRW' };
+        let exchangeRates = { TWD: 0.024, USD: 0.00075, KRW: 1 };
 
         async function fetchRates() {
             try {
@@ -198,24 +245,22 @@
             });
         }
 
-        const modal = document.getElementById('bookingModal');
-        function openModal() { modal.classList.add('active'); }
-        function closeModal() { modal.classList.remove('active'); }
+        function openModal() { document.getElementById('bookingModal').classList.add('active'); }
+        function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
 
         document.getElementById('bookingForm').onsubmit = async function(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.innerText;
-            
-            submitBtn.innerText = "Sending...";
+            submitBtn.innerText = "Processing...";
             submitBtn.disabled = true;
 
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value || '未提供',
+                phone: document.getElementById('phone').value,
                 date: document.getElementById('date').value,
-                time: document.getElementById('time').value, 
+                time: document.getElementById('time').value,
                 service: document.getElementById('service').value,
                 length: document.getElementById('length').value,
                 lang: document.documentElement.lang || 'zh-TW'
@@ -224,18 +269,17 @@
             try {
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors', 
+                    mode: 'no-cors',
                     cache: 'no-cache',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
-
-                const lang = document.documentElement.lang || 'zh-TW';
-                alert(translations[lang]['success'] || "Success!");
+                
+                const currentLang = document.documentElement.lang || 'zh-TW';
+                alert(translations[currentLang].success);
                 closeModal();
                 e.target.reset();
-            } catch (error) {
-                alert("Submission failed: " + error.message);
+            } catch (err) {
+                alert("Error: " + err.message);
             } finally {
                 submitBtn.innerText = originalText;
                 submitBtn.disabled = false;
@@ -243,7 +287,7 @@
         };
 
         window.onload = () => {
-            initGallery();
+            initSwiper();
             fetchRates();
         };
     </script>
