@@ -120,12 +120,15 @@
     </footer>
 
     <script>
-        // 已更換為你提供的部署網址
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYWWqCN8UA8VwTiYvBFrPMpb6CGK_OxzW9ty_2JyPWlIUvVxSgrd3JrPe3Djz1hLVx/exec"; 
+        // 🚀 已更換為你最新建立的新網址
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaWTHAQhWJhoiVqM5sHibImeqqkbpSR4iMOMb83IWuAgfhH6DpDSMSwJAQjasqt1mz/exec"; 
 
         const translations = {
             'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': '線上預約', 'about_title': '服務價目', 'service_1': '韓式剪髮', 'service_2': '設計染髮', 'service_3': '深層護理', 'modal_title': '線上預約諮詢', 'submit_btn': '確認送出預約', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '電話 Phone (選填)', 'success': '預約已送出！', 'length_title': '頭髮長度 / Length', 'len_1': '極短髮 (耳朵以上)', 'len_2': '中長髮 (肩下胸上)', 'len_3': '長髮 (過胸)' },
-            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style, Meet Yourself', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'service_1': 'Korean Cut', 'service_2': 'Design Color', 'service_3': 'Hair Clinic', 'modal_title': 'Reservation Inquiry', 'submit_btn': 'Confirm Booking', 'name_placeholder': 'Name', 'email_placeholder': 'Email (Required)', 'phone_placeholder': 'Phone (Optional)', 'success': 'Booking sent successfully!', 'length_title': 'Hair Length', 'len_1': 'Short (Above Ear)', 'len_2': 'Medium (Below Shoulder)', 'len_3': 'Long (Past Chest)' }
+            'zh-CN': { 'book_now': '立即预约', 'hero_title': '在这里，遇见更好的自己', 'online_booking': '在线预约', 'about_title': '服务价目', 'service_1': '韩式剪发', 'service_2': '设计染发', 'service_3': '深层护理', 'modal_title': '在线预约咨询', 'submit_btn': '确认送出预约', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '电话 Phone (选填)', 'success': '预约已送出！', 'length_title': '头发长度 / Length', 'len_1': '短发 (耳上)', 'len_2': '中长发 (肩下)', 'len_3': '长发 (过胸)' },
+            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style, Meet Yourself', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'service_1': 'Korean Cut', 'service_2': 'Design Color', 'service_3': 'Hair Clinic', 'modal_title': 'Reservation Inquiry', 'submit_btn': 'Confirm Booking', 'name_placeholder': 'Name', 'email_placeholder': 'Email (Required)', 'phone_placeholder': 'Phone (Optional)', 'success': 'Booking sent successfully!', 'length_title': 'Hair Length', 'len_1': 'Short (Above Ear)', 'len_2': 'Medium (Below Shoulder)', 'len_3': 'Long (Past Chest)' },
+            'ko': { 'book_now': '지금 예약', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': '가격표', 'service_1': '커트', 'service_2': '염색', 'service_3': '클리닉', 'modal_title': '온라인 예약 상담', 'submit_btn': '예약 확정', 'name_placeholder': '이름', 'email_placeholder': '이메일', 'phone_placeholder': '전화번호', 'success': '예약이 완료되었습니다!', 'length_title': '모발 길이', 'len_1': '숏', 'len_2': '미디엄', 'len_3': '롱' },
+            'ja': { 'book_now': '今すぐ予約', 'hero_title': 'ここで、より良い自分に出会う', 'online_booking': 'オンライン予約', 'about_title': '料金表', 'service_1': 'カット', 'service_2': 'カラー', 'service_3': 'トリートメント', 'modal_title': 'オンライン予約相談', 'submit_btn': '予約を確定する', 'name_placeholder': 'お名前', 'email_placeholder': 'メール', 'phone_placeholder': '電話番号', 'success': '予約が送信されました！', 'length_title': '髪の長さ', 'len_1': 'ショート', 'len_2': 'ミディアム', 'len_3': 'ロング' }
         };
 
         const currencyMap = { 'zh-TW': 'TWD', 'en': 'USD', 'ko': 'KRW', 'ja': 'JPY', 'zh-CN': 'CNY' };
@@ -146,6 +149,10 @@
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) el.placeholder = translations[lang][key];
             });
             document.querySelectorAll('.currency-box').forEach(el => {
                 const krw = parseFloat(el.getAttribute('data-price-krw'));
@@ -177,10 +184,10 @@
             };
 
             try {
-                // 採用 no-cors 模式，適合單向送出資料到 Google Script
+                // 發送 POST 請求到新的 GAS 網址
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
+                    mode: 'no-cors', // 重要：避免 CORS 跨域阻擋
                     cache: 'no-cache',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
