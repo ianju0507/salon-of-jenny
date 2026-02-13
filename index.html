@@ -73,13 +73,12 @@
             <p class="text-stone-400 text-xs mb-12 tracking-widest uppercase">沉浸式空間體驗｜SALON DE JENNY</p>
             
             <div class="relative group h-[400px] md:h-[650px] rounded-[2rem] overflow-hidden shadow-2xl border border-[#E5DED5]">
-                <div id="tour-display" class="w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out scale-100 group-hover:scale-105" 
-                     style="background-image: url('A82F7E0B-683B-4DAB-9746-6C6298D20901.jpeg');">
+                <div id="tour-display" class="w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out scale-100 group-hover:scale-105">
                     <div class="absolute inset-0 bg-black/5"></div>
                 </div>
                 <div id="dot-container" class="absolute bottom-10 left-1/2 -translate-x-1/2 flex space-x-4 z-10"></div>
                 <div class="absolute top-10 left-10 text-left bg-white/80 backdrop-blur-md px-6 py-3 rounded-full border border-[#C2A383]/30">
-                    <p id="view-title" class="text-[10px] tracking-[0.2em] text-[#8C6A5E] font-bold uppercase">Panorama Overview</p>
+                    <p id="view-title" class="text-[10px] tracking-[0.2em] text-[#8C6A5E] font-bold uppercase"></p>
                 </div>
             </div>
         </div>
@@ -105,43 +104,23 @@
         </div>
     </section>
 
-    <section id="location" class="py-24 bg-stone-50 px-6">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center text-center md:text-left">
-            <div class="space-y-6">
-                <h3 class="text-2xl tracking-widest uppercase text-[#8C6A5E] font-semibold">Studio Info</h3>
-                <div class="space-y-4 text-stone-500 text-sm leading-relaxed">
-                    <p><i class="fa-solid fa-location-dot mr-3"></i>Busan, South Korea (釜山, 南韓)</p>
-                    <p><i class="fa-solid fa-phone mr-3"></i>+82 10-XXXX-XXXX</p>
-                    <p><i class="fa-solid fa-envelope mr-3"></i>jenny.salon@example.com</p>
-                    <p><i class="fa-solid fa-clock mr-3"></i>Tue - Sun: 10:00 AM - 08:00 PM</p>
-                </div>
-                <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 pt-4">
-                    <a href="#" class="border border-[#8C6A5E] text-[#8C6A5E] px-8 py-3 text-[10px] tracking-widest hover:bg-[#8C6A5E] hover:text-white transition rounded-full">GOOGLE MAPS</a>
-                    <a href="https://map.naver.com/" class="bg-[#03C75A] text-white px-8 py-3 text-[10px] tracking-widest transition rounded-full">NAVER MAP</a>
-                </div>
-            </div>
-            <div class="h-64 bg-[#E5DED5] rounded-3xl flex items-center justify-center">
-                <p class="text-stone-400 italic">Map Preview</p>
-            </div>
-        </div>
-    </section>
-
     <div id="bookingModal">
         <div class="bg-[#FDFCFB] w-full max-w-md mx-4 p-10 rounded-3xl shadow-2xl relative border border-stone-100">
             <button onclick="closeModal()" class="absolute top-6 right-6 text-stone-300 text-2xl hover:text-[#8C6A5E] transition">&times;</button>
             <h3 data-i18n="modal_title" class="text-2xl mb-8 text-center tracking-widest font-semibold text-[#8C6A5E]">線上預約諮詢</h3>
             <form id="bookingForm" class="space-y-5 text-left">
                 <input type="text" id="name" data-i18n-placeholder="name_placeholder" placeholder="姓名 Name" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383]">
-                <input type="email" id="email" data-i18n-placeholder="email_placeholder" placeholder="Email (必填)" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383]">
+                <input type="email" id="email" data-i18n-placeholder="email_placeholder" placeholder="Email" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383]">
                 <input type="tel" id="phone" data-i18n-placeholder="phone_placeholder" placeholder="電話 Phone" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl outline-none focus:border-[#C2A383]">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="date" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm">
-                    <input type="time" id="time" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm">
+                    <input type="date" id="date" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none">
+                    <input type="time" id="time" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none">
                 </div>
                 <select id="service" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none">
                     <option value="Cut">Cut / 剪髮</option>
                     <option value="Color">Color / 染髮</option>
                     <option value="Treatment">Treatment / 護理</option>
+                    <option value="Perm">Perm / 燙髮</option>
                 </select>
                 <select id="length" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-xl text-sm outline-none" required>
                     <option value="" disabled selected data-i18n="length_title">頭髮長度 / Length</option>
@@ -159,31 +138,20 @@
     </footer>
 
     <script>
-        // 🚀 請替換為你最新的 GAS URL
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbXS-OFzYxYeXPbexxI2_YZ6xnHqMkd1TDgaZXkoFJzjyQi9GA0nzDZqN-iRTTLaYK/exec"; 
 
+        // 🌟 整合你的 7 張圖片代碼
         const tourImages = [
             { url: 'overlook.jpeg', title: 'Panorama Overview' },
             { url: 'sea.jpeg', title: 'Sunlight Reception' },
             { url: 'main.jpeg', title: 'Brand Identity' },
             { url: 'rest.jpeg', title: 'Lounge Area' },
-            { url: 'side_view.jpeg', title: 'Styling Zone' },
+            { url: 'sideview.jpeg', title: 'Styling Zone' },
             { url: 'front.jpeg', title: 'Your Seat' }
         ];
 
-        const translations = {
-            'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': '線上預約', 'about_title': '服務價目', 'service_1': '韓式剪髮', 'service_2': '設計染髮', 'service_3': '深層護理', 'modal_title': '線上預約諮詢', 'submit_btn': '確認送出預約', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '電話 Phone', 'success': '預約已送出！確認信已寄到您的信箱。', 'length_title': '頭髮長度 / Length', 'len_1': '極短髮 (耳朵以上)', 'len_2': '中長髮 (肩下胸上)', 'len_3': '長髮 (過胸)' },
-            'ko': { 'book_now': '지금 예약하기', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': '서비스 및 가격', 'service_1': '한국식 커트', 'service_2': '디자인 컬러', 'service_3': '클리닉 케어', 'modal_title': '온라인 예약 상담', 'submit_btn': '예약 확정하기', 'name_placeholder': '이름 Name', 'email_placeholder': '이메일 (필수)', 'phone_placeholder': '전화번호', 'success': '예약이 접수되었습니다! 이메일을 확인해주세요.', 'length_title': '모발 길이 / Length', 'len_1': '숏 / 단발 (귀 위)', 'len_2': '중간 / 미디엄 (어깨 밑)', 'len_3': '롱 (가슴 밑)' },
-            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style, Meet Yourself', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'service_1': 'Korean Cut', 'service_2': 'Design Color', 'service_3': 'Hair Clinic', 'modal_title': 'Reservation Inquiry', 'submit_btn': 'Confirm Booking', 'name_placeholder': 'Name', 'email_placeholder': 'Email (Required)', 'phone_placeholder': 'Phone', 'success': 'Booking sent successfully!', 'length_title': 'Hair Length', 'len_1': 'Short (Above Ear)', 'len_2': 'Medium (Below Shoulder)', 'len_3': 'Long (Past Chest)' },
-            'ja': { 'book_now': '今すぐ予約', 'hero_title': 'ここで、より良い自分に出會う', 'online_booking': 'オンライン予約', 'about_title': '料金表', 'service_1': '韓國風カット', 'service_2': 'デザインカラー', 'service_3': 'ヘアケア', 'modal_title': 'オンライン予約相談', 'submit_btn': '予約を確定する', 'name_placeholder': 'お名前 Name', 'email_placeholder': 'メール (必須)', 'phone_placeholder': '電話番号', 'success': '予約が送信されました！', 'length_title': '髪の長さ / Length', 'len_1': 'ショート (耳上)', 'len_2': 'ミディアム (肩下)', 'len_3': 'ロング (胸下)' },
-            'zh-CN': { 'book_now': '立即预约', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': '在线预约', 'about_title': '服务价目', 'service_1': '韓式剪髮', 'service_2': '设计染髮', 'service_3': '深层护理', 'modal_title': '在线预约咨询', 'submit_btn': '确认提交预约', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '电话 Phone', 'success': '预约已提交！', 'length_title': '头发长度 / Length', 'len_1': '短发 (耳上)', 'len_2': '中长发 (肩下)', 'len_3': '长发 (过胸)' }
-        };
-
-        const currencyMap = { 'zh-TW': 'TWD', 'ko': 'KRW', 'en': 'USD', 'ja': 'JPY', 'zh-CN': 'CNY' };
-        let exchangeRates = {};
         let currentTourIndex = 0;
 
-        // 3D 實景輪播初始化
         function initTour() {
             const container = document.getElementById('dot-container');
             tourImages.forEach((_, i) => {
@@ -193,7 +161,10 @@
                 container.appendChild(dot);
             });
             updateTourDisplay(0);
-            setInterval(() => { currentTourIndex = (currentTourIndex + 1) % tourImages.length; updateTourDisplay(currentTourIndex); }, 5000);
+            setInterval(() => {
+                currentTourIndex = (currentTourIndex + 1) % tourImages.length;
+                updateTourDisplay(currentTourIndex);
+            }, 5000);
         }
 
         function updateTourDisplay(index) {
@@ -208,17 +179,21 @@
             });
         }
 
-        // 匯率抓取與更新
+        const translations = {
+            'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': '線上預約', 'about_title': '服務價目', 'service_1': '韓式剪髮', 'service_2': '設計染髮', 'service_3': '深層護理', 'modal_title': '線上預約諮詢', 'submit_btn': '確認送出預約', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email (必填)', 'phone_placeholder': '電話 Phone', 'success': '預約已送出！', 'length_title': '頭髮長度 / Length', 'len_1': '極短髮', 'len_2': '中長髮', 'len_3': '長髮' },
+            'ko': { 'book_now': '지금 예약', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': '가격표', 'service_1': '커트', 'service_2': '염색', 'service_3': '클리닉', 'modal_title': '온라인 예약 상담', 'submit_btn': '예약 확정', 'name_placeholder': '이름', 'email_placeholder': '이메일', 'phone_placeholder': '전화번호', 'success': '예약이 접수되었습니다!', 'length_title': '모발 길이', 'len_1': '숏', 'len_2': '미디엄', 'len_3': '롱' }
+        };
+
+        const currencyMap = { 'zh-TW': 'TWD', 'ko': 'KRW', 'en': 'USD', 'ja': 'JPY' };
+        let exchangeRates = { TWD: 0.024, KRW: 1 };
+
         async function fetchRates() {
             try {
                 const response = await fetch('https://open.er-api.com/v6/latest/KRW');
                 const data = await response.json();
                 exchangeRates = data.rates;
                 updateAll('zh-TW');
-            } catch (e) {
-                exchangeRates = { TWD: 0.023, CNY: 0.0053, JPY: 0.11, USD: 0.00075, KRW: 1 };
-                updateAll('zh-TW');
-            }
+            } catch (e) { console.log("Rate API failed."); }
         }
 
         function updateAll(lang) {
@@ -226,11 +201,7 @@
             const currency = currencyMap[lang] || 'USD';
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) el.innerText = translations[lang][key];
-            });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (translations[lang][key]) el.placeholder = translations[lang][key];
+                if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
             });
             document.querySelectorAll('.currency-box').forEach(el => {
                 const krw = parseFloat(el.getAttribute('data-price-krw'));
@@ -243,37 +214,47 @@
         function openModal() { modal.classList.add('active'); }
         function closeModal() { modal.classList.remove('active'); }
 
-        // 表單提交
+        // 🌟 修正 Excel 寫入邏輯：改用 URLSearchParams 傳送
         document.getElementById('bookingForm').onsubmit = async function(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.innerText;
             submitBtn.innerText = "Sending...";
             submitBtn.disabled = true;
 
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value || '未提供',
-                date: document.getElementById('date').value,
-                time: document.getElementById('time').value, 
-                service: document.getElementById('service').value,
-                length: document.getElementById('length').value,
-                lang: document.documentElement.lang || 'zh-TW'
-            };
+            const formData = new URLSearchParams();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('phone', document.getElementById('phone').value || '未提供');
+            formData.append('date', document.getElementById('date').value);
+            formData.append('time', document.getElementById('time').value);
+            formData.append('service', document.getElementById('service').value);
+            formData.append('length', document.getElementById('length').value);
+            formData.append('lang', document.documentElement.lang || 'zh-TW');
 
             try {
-                await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(formData) });
-                alert(translations[document.documentElement.lang]['success']);
+                // 使用 POST 並確保資料以表單格式傳送給 GAS
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', 
+                    body: formData
+                });
+
+                const lang = document.documentElement.lang || 'zh-TW';
+                alert(translations[lang]['success'] || "Success!");
                 closeModal();
                 e.target.reset();
+            } catch (error) {
+                alert("Submission failed: " + error.message);
             } finally {
-                submitBtn.innerText = originalText;
+                submitBtn.innerText = "確認送出預約";
                 submitBtn.disabled = false;
             }
         };
 
-        window.onload = () => { fetchRates(); initTour(); };
+        window.onload = () => {
+            fetchRates();
+            initTour();
+        };
     </script>
 </body>
 </html>
