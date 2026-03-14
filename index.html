@@ -19,6 +19,7 @@
             background-size: cover; background-position: center;
         }
         
+        /* Swiper Style */
         .swiper { width: 100%; padding-top: 30px; padding-bottom: 50px; }
         .swiper-slide {
             background-position: center; background-size: cover;
@@ -28,27 +29,126 @@
         }
         @media (min-width: 768px) { .swiper-slide { width: 550px; height: 400px; } }
 
+        /* --- 情人節考驗層 (Valentine Quiz Layer) --- */
+        #valentine-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.8s ease-in-out;
+        }
+        .surprise-card {
+            background: white; padding: 2.5rem; border-radius: 40px; text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(255, 105, 180, 0.3);
+            max-width: 90%; width: 380px; z-index: 10000;
+        }
+        .btn-choice {
+            width: 100%; padding: 14px; border-radius: 99px; margin-top: 12px;
+            font-weight: 600; transition: all 0.2s;
+        }
+        .btn-love { background: #FF6B6B; color: white; box-shadow: 0 4px 15px rgba(255,107,107,0.3); }
+        .btn-other { border: 1px solid #ddd; color: #888; }
+        #runaway-btn { position: relative; transition: transform 0.1s ease; }
+        .black-screen { background: #000 !important; }
+        .black-screen #card-content { background: transparent !important; box-shadow: none !important; }
+        .heart-broken { font-size: 80px; color: #ff3333; animation: crack 0.8s ease infinite alternate; }
+        @keyframes crack { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+        .contract-box { 
+            border: 2px dashed #FF6B6B; padding: 20px; background: #FFF9F9; 
+            text-align: left; border-radius: 20px; margin: 15px 0; position: relative;
+        }
+        .approved-stamp {
+            position: absolute; bottom: 10px; right: 10px;
+            border: 4px solid rgba(255, 107, 107, 0.2);
+            color: rgba(255, 107, 107, 0.2);
+            font-size: 20px; font-weight: 900; padding: 2px 10px;
+            border-radius: 8px; transform: rotate(-15deg);
+        }
+
+        /* --- 官網原有樣式 --- */
         #bookingModal {
             display: none; position: fixed; inset: 0; background: rgba(58, 45, 40, 0.6);
             backdrop-filter: blur(8px); z-index: 100; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 0.3s ease;
         }
         #bookingModal.active { display: flex; opacity: 1; }
-        
         .btn-luxury { background-color: #8C6A5E; color: white; transition: all 0.4s ease; }
         .btn-luxury:hover { background-color: #C2A383; transform: translateY(-2px); }
-
-        .map-btn {
-            transition: all 0.3s ease;
-            border: 1px solid #D1C7BD;
-            color: #756D66;
-        }
+        .map-btn { transition: all 0.3s ease; border: 1px solid #D1C7BD; color: #756D66; }
         .map-btn:hover { background-color: #8C6A5E; color: white; border-color: #8C6A5E; }
         .btn-naver { background-color: #58C068; color: white; border: none; }
         .btn-naver:hover { background-color: #46a354; }
     </style>
 </head>
 <body class="bg-creamy text-[#4A443F]">
+
+    <div id="valentine-overlay">
+        <div class="surprise-card" id="card-content">
+            <div id="step-1">
+                <div class="text-[#FF6B6B] text-5xl mb-6"><i class="fas fa-heart"></i></div>
+                <h2 class="text-2xl font-bold text-[#5C534D] mb-6">아직도 나를 사랑해?</h2>
+                <button onclick="toQuizStep('sign')" class="btn-choice btn-love">사랑해</button>
+                <button onclick="toQuizStep('hesitate')" class="btn-choice btn-other">아니, 다른 사람이 생겼어</button>
+            </div>
+
+            <div id="step-hesitate" class="hidden">
+                <div class="text-stone-400 text-5xl mb-6"><i class="fas fa-face-sad-tear"></i></div>
+                <h2 class="text-xl font-bold text-[#5C534D] mb-6">정말... 날 떠날 수 있어?</h2>
+                <button onclick="toQuizStep('1')" class="btn-choice btn-love">아니, 못 떠나</button>
+                <button id="runaway-btn" onmouseover="runAway(this)" onclick="triggerBlack()" class="btn-choice btn-other">응, 떠날 수 있어</button>
+            </div>
+
+            <div id="step-sign" class="hidden">
+                <h2 class="text-xl font-bold text-[#FF6B6B] mb-4">사랑의 계약서</h2>
+                <ul class="text-sm text-left text-stone-600 space-y-2 mb-6 bg-stone-50 p-4 rounded-xl">
+                    <li>• 매일 먼저 연락 10번 하기</li>
+                    <li>• 매주 1번 영상통화 하기</li>
+                    <li>• 영원히 솔직하고 곁에 있어주기</li>
+                </ul>
+                <input type="text" id="signerName" placeholder="여기에 이름을 적어줘" class="w-full border-b-2 border-[#FF6B6B] p-2 mb-6 outline-none text-center">
+                <button onclick="signContract()" class="btn-choice btn-love">서명하고 본인인증 하기</button>
+            </div>
+
+            <div id="step-quiz-1" class="hidden">
+                <h2 class="text-xl font-bold text-[#5C534D] mb-6">본인인증 Q1：<br>여자친구의 생일은 언제야?</h2>
+                <button onclick="triggerBlack()" class="btn-choice btn-other">2001. 05. 07</button>
+                <button onclick="toQuizStep('quiz-2')" class="btn-choice btn-love">2002. 05. 07</button>
+            </div>
+
+            <div id="step-quiz-2" class="hidden">
+                <h2 class="text-xl font-bold text-[#5C534D] mb-6">본인인증 Q2：<br>남자친구의 직업은 뭐야?</h2>
+                <button onclick="triggerBlack()" class="btn-choice btn-other">엔지니어</button>
+                <button onclick="toQuizStep('contract-final')" class="btn-choice btn-love">외국계 수석 엔지니어</button>
+            </div>
+
+            <div id="step-contract-final" class="hidden">
+                <h2 class="text-lg font-bold text-stone-700 mb-2">❤ 계약 체결 완료 ❤</h2>
+                <div class="contract-box">
+                    <p class="text-[12px] text-stone-500 mb-2">갑: Ian / 을: <span id="display-name" class="font-bold underline text-[#FF6B6B]"></span></p>
+                    <p class="text-[13px] text-stone-700 italic leading-relaxed">
+                        「본인은 오늘부터 매일 연락 10번, 매주 영상통화 1번을 할 것을 약속하며, 이를 어길 시 벌을 달게 받겠습니다.」
+                    </p>
+                    <div class="approved-stamp">APPROVED</div>
+                </div>
+                <p class="text-[11px] text-[#FF6B6B] font-bold mb-6 animate-pulse">【이 화면을 캡쳐해서 남자친구에게 보내고 다음을 눌러줘】</p>
+                <button onclick="toQuizStep('photo-task')" class="btn-choice btn-love">캡쳐 완료</button>
+            </div>
+
+            <div id="step-photo-task" class="hidden">
+                <div class="text-[#FF6B6B] text-4xl mb-4"><i class="fas fa-camera"></i></div>
+                <h2 class="text-lg font-bold text-stone-700 mb-4">마지막 미션</h2>
+                <p class="text-sm text-stone-500 mb-6">지금 바로 "남자친구가 선물해준 토끼 인형과 함께 찍은 사진"을 보내줘.</p>
+                <button onclick="unlockOfficialSite()" class="btn-choice btn-love">사진 보냈어, 홈페이지 입장</button>
+                <button onclick="triggerBlack()" class="btn-choice btn-other">나중에 보낼게</button>
+            </div>
+
+            <div id="step-broken" class="hidden">
+                <div class="heart-broken mb-4"><i class="fas fa-heart-crack"></i></div>
+                <p class="text-white text-lg font-bold tracking-widest">Game Over.</p>
+                <button onclick="revive()" class="mt-8 text-pink-400 underline text-xs">다시 생각났어, 기회를 줘</button>
+            </div>
+        </div>
+    </div>
 
     <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-[#E5DED5]">
         <div class="max-w-7xl mx-auto px-4 md:px-6 h-20 flex justify-between items-center">
@@ -59,11 +159,6 @@
                     <option value="ko">한국어</option>
                     <option value="en">EN</option>
                 </select>
-                <div class="hidden md:flex items-center space-x-4 border-l pl-4 border-stone-200 text-stone-600">
-                    <a href="https://www.instagram.com/hada_jenny/" target="_blank" class="hover:text-[#8C6A5E] transition"><i class="fa-brands fa-instagram text-xl"></i></a>
-                    <a href="https://pf.kakao.com/" target="_blank" class="hover:text-[#8C6A5E] transition"><i class="fa-comment text-xl"></i></a>
-                    <a href="https://line.me/" target="_blank" class="hover:text-[#8C6A5E] transition"><i class="fa-brands fa-line text-xl"></i></a>
-                </div>
                 <button onclick="openModal()" data-i18n="book_now" class="btn-luxury px-5 py-2 rounded-lg text-sm font-medium shadow-sm">立即預約</button>
             </div>
         </div>
@@ -124,22 +219,16 @@
                         <span>Busan, South Korea (釜山廣域市)</span>
                     </li>
                     <li class="flex items-center space-x-4">
-                        <i class="fa-solid fa-phone text-[#8C6A5E]"></i>
-                        <span>+82 10-XXXX-XXXX</span>
-                    </li>
-                    <li class="flex items-center space-x-4">
                         <i class="fa-solid fa-clock text-[#8C6A5E]"></i>
                         <span data-i18n="open_hours">Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)</span>
                     </li>
                 </ul>
                 <div class="flex flex-wrap gap-4 pt-4">
-                    <a href="https://maps.google.com" target="_blank" class="map-btn px-8 py-3 rounded-full text-[10px] tracking-[0.2em] font-bold uppercase shadow-sm">Google Maps</a>
-                    <a href="https://naver.me" target="_blank" class="btn-naver px-8 py-3 rounded-full text-[10px] tracking-[0.2em] font-bold uppercase shadow-lg shadow-green-100">Naver Map</a>
+                    <a href="https://naver.me" target="_blank" class="btn-naver px-8 py-3 rounded-full text-[10px] tracking-[0.2em] font-bold uppercase shadow-lg">Naver Map</a>
                 </div>
             </div>
-            <div class="flex-1 w-full h-[400px] bg-[#F2EEE8] rounded-[50px] flex items-center justify-center border border-stone-100 relative overflow-hidden group shadow-inner">
-                <i class="fa-solid fa-map-location-dot text-white text-7xl drop-shadow-sm group-hover:scale-110 transition-transform duration-1000"></i>
-                <span class="absolute bottom-10 text-[10px] tracking-[0.5em] text-stone-400 uppercase font-bold">Map Preview</span>
+            <div class="flex-1 w-full h-[400px] bg-[#F2EEE8] rounded-[50px] flex items-center justify-center relative overflow-hidden group shadow-inner">
+                <i class="fa-solid fa-map-location-dot text-white text-7xl group-hover:scale-110 transition-transform duration-1000"></i>
             </div>
         </div>
     </section>
@@ -147,37 +236,64 @@
     <div id="bookingModal">
         <div class="bg-[#FDFCFB] w-full max-w-md mx-4 p-10 rounded-[40px] shadow-2xl relative border border-stone-100 text-left">
             <button onclick="closeModal()" class="absolute top-8 right-8 text-stone-300 text-2xl hover:text-stone-600 transition">×</button>
-            <h3 data-i18n="modal_title" class="text-2xl mb-8 text-center tracking-widest font-semibold text-[#8C6A5E]">線上預約諮詢</h3>
+            <h3 data-i18n="modal_title" class="text-2xl mb-8 text-center tracking-widest font-semibold text-[#8C6A5E]">預約諮詢</h3>
             <form id="bookingForm" class="space-y-5">
-                <input type="text" id="name" data-i18n-placeholder="name_placeholder" placeholder="姓名 Name" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl outline-none focus:border-[#C2A383]">
-                <input type="email" id="email" data-i18n-placeholder="email_placeholder" placeholder="Email" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl outline-none focus:border-[#C2A383]">
-                <input type="tel" id="phone" placeholder="Phone" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl outline-none focus:border-[#C2A383]">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="date" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl text-sm outline-none">
-                    <input type="time" id="time" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl text-sm outline-none">
-                </div>
-                <select id="service" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl text-sm outline-none">
-                    <option value="Cut">Cut / 剪髮</option>
-                    <option value="Color">Color / 染髮</option>
-                    <option value="Treatment">Treatment / 護理</option>
-                </select>
-                <select id="length" class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl text-sm outline-none">
-                    <option value="Short">Short / 短髮</option>
-                    <option value="Medium">Medium / 中長</option>
-                    <option value="Long">Long / 長髮</option>
-                </select>
+                <input type="text" id="name" placeholder="姓名 Name" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl outline-none">
+                <input type="email" id="email" placeholder="Email" required class="w-full bg-stone-50 border border-stone-200 p-4 rounded-2xl outline-none">
                 <button type="submit" id="submitBtn" data-i18n="submit_btn" class="btn-luxury w-full py-5 rounded-2xl font-bold tracking-widest">確認送出預約</button>
             </form>
         </div>
     </div>
 
-    <footer class="py-12 text-center text-[10px] text-stone-400 tracking-[0.4em] uppercase bg-white border-t border-stone-100">
-        © 2026 SALON OF JENNY.
-    </footer>
-
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbo-NATR41TWm96_gWxFg0XSOwBuXOlZx-1TH5ZYF8Wz7ef89aohJM69QucRfvA3N9lg/exec";
+        // --- 遊戲邏輯 (情人節遊戲) ---
+        function toQuizStep(stepId) {
+            const steps = ['1', 'hesitate', 'sign', 'quiz-1', 'quiz-2', 'contract-final', 'photo-task', 'broken'];
+            steps.forEach(s => {
+                const el = document.getElementById('step-' + s);
+                if(el) el.classList.add('hidden');
+            });
+            document.getElementById('step-' + stepId).classList.remove('hidden');
+        }
 
+        function runAway(btn) {
+            const x = Math.random() * 260 - 130;
+            const y = Math.random() * 260 - 130;
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        function triggerBlack() {
+            const overlay = document.getElementById('valentine-overlay');
+            toQuizStep('broken');
+            setTimeout(() => {
+                overlay.classList.add('black-screen');
+                document.querySelectorAll('#card-content > div:not(#step-broken)').forEach(el => el.style.display = 'none');
+            }, 300);
+        }
+
+        function revive() {
+            const overlay = document.getElementById('valentine-overlay');
+            overlay.classList.remove('black-screen');
+            document.querySelectorAll('#card-content > div').forEach(el => el.style.display = '');
+            toQuizStep('quiz-1'); 
+        }
+
+        function signContract() {
+            const name = document.getElementById('signerName').value;
+            if (!name.trim()) { alert('이름을 입력해 주세요!'); return; }
+            document.getElementById('display-name').innerText = name;
+            toQuizStep('quiz-1');
+        }
+
+        function unlockOfficialSite() {
+            const overlay = document.getElementById('valentine-overlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 800);
+        }
+
+        // --- 官網原有邏輯 ---
         const tourImages = [
             { url: 'overlook.jpeg', title: 'Panorama' },
             { url: 'sea.jpeg', title: 'Reception' },
@@ -199,20 +315,18 @@
 
             new Swiper(".mySwiper", {
                 effect: "coverflow",
-                grabCursor: true,
                 centeredSlides: true,
                 slidesPerView: "auto",
                 coverflowEffect: { rotate: 20, stretch: 0, depth: 150, modifier: 1.5, slideShadows: true },
-                autoplay: { delay: 3500, disableOnInteraction: false },
-                pagination: { el: ".swiper-pagination", clickable: true },
-                loop: true
+                loop: true,
+                autoplay: { delay: 3500 }
             });
         }
 
         const translations = {
-            'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': 'ONLINE BOOKING', 'about_title': 'Service & Price', 'tour_title': 'Studio Tour', 'info_title': 'Studio Info', 'open_hours': 'Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)', 'modal_title': '預約諮詢', 'name_placeholder': '姓名 Name', 'email_placeholder': 'Email', 'submit_btn': '確認送出預約', 'success': '預約已送出，請檢查您的信箱。' },
-            'ko': { 'book_now': '지금 예약하기', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': 'Service & Price', 'tour_title': '스튜디오 투어', 'info_title': 'Studio Info', 'open_hours': '화 - 일: 10:00 AM - 08:00 PM (월요일 휴무)', 'modal_title': '예약 상담', 'name_placeholder': '성함', 'email_placeholder': '이메일', 'submit_btn': '예약 신청하기', 'success': '예약이 접수되었습니다. 이메일을 확인해 주세요.' },
-            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'tour_title': 'Space Tour', 'info_title': 'Studio Info', 'open_hours': 'Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)', 'modal_title': 'Booking Inquiry', 'name_placeholder': 'Name', 'email_placeholder': 'Email', 'submit_btn': 'Submit Booking', 'success': 'Booking sent! Please check your email.' }
+            'zh-TW': { 'book_now': '立即預約', 'hero_title': '在這裡，遇見更好的自己', 'online_booking': 'ONLINE BOOKING', 'about_title': 'Service & Price', 'tour_title': 'Studio Tour', 'info_title': 'Studio Info', 'open_hours': 'Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)', 'modal_title': '預約諮詢', 'submit_btn': '確認送出預約', 'success': '預約已送出。' },
+            'ko': { 'book_now': '지금 예약하기', 'hero_title': '여기서 더 나은 당신을 만나보세요', 'online_booking': '온라인 예약', 'about_title': 'Service & Price', 'tour_title': '스튜디오 투어', 'info_title': 'Studio Info', 'open_hours': '화 - 일: 10:00 AM - 08:00 PM (월요일 휴무)', 'modal_title': '예약 상담', 'submit_btn': '예약 신청하기', 'success': '예약이 접수되었습니다.' },
+            'en': { 'book_now': 'Book Now', 'hero_title': 'Refine Your Style', 'online_booking': 'Online Booking', 'about_title': 'Service & Price', 'tour_title': 'Space Tour', 'info_title': 'Studio Info', 'open_hours': 'Tue - Sun: 10:00 AM - 08:00 PM (Monday Closed)', 'modal_title': 'Booking Inquiry', 'submit_btn': 'Submit Booking', 'success': 'Booking sent!' }
         };
 
         const currencyMap = { 'zh-TW': 'TWD', 'en': 'USD', 'ko': 'KRW' };
@@ -234,10 +348,6 @@
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
             });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (translations[lang] && translations[lang][key]) el.placeholder = translations[lang][key];
-            });
             document.querySelectorAll('.currency-box').forEach(el => {
                 const krw = parseFloat(el.getAttribute('data-price-krw'));
                 const rate = exchangeRates[currency] || 1;
@@ -247,44 +357,6 @@
 
         function openModal() { document.getElementById('bookingModal').classList.add('active'); }
         function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
-
-        document.getElementById('bookingForm').onsubmit = async function(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.innerText;
-            submitBtn.innerText = "Processing...";
-            submitBtn.disabled = true;
-
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                date: document.getElementById('date').value,
-                time: document.getElementById('time').value,
-                service: document.getElementById('service').value,
-                length: document.getElementById('length').value,
-                lang: document.documentElement.lang || 'zh-TW'
-            };
-
-            try {
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    body: JSON.stringify(formData)
-                });
-                
-                const currentLang = document.documentElement.lang || 'zh-TW';
-                alert(translations[currentLang].success);
-                closeModal();
-                e.target.reset();
-            } catch (err) {
-                alert("Error: " + err.message);
-            } finally {
-                submitBtn.innerText = originalText;
-                submitBtn.disabled = false;
-            }
-        };
 
         window.onload = () => {
             initSwiper();
